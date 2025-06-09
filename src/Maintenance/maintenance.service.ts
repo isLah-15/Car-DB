@@ -1,0 +1,46 @@
+import { eq } from "drizzle-orm";
+import db from "../Drizzle/db";
+import { CarTable, MaintenanceTable, TIMaintenance } from "../Drizzle/schema";
+
+// create maintenance service
+export const createMaintenanceService = async (maintenance: TIMaintenance) => {
+    const [inserted] = await db.insert(MaintenanceTable).values(maintenance).returning()
+        if(inserted) {
+            return inserted;
+        }
+        return null;
+};
+
+//get all maintenance service with car details
+export const getAllMaintenanceService = async () => {
+    const maintenance = await db.select().from(MaintenanceTable)
+    .leftJoin(CarTable as any, eq(MaintenanceTable.carId, CarTable.carId));
+    if (maintenance.length === 0) {
+        return "No maintenance found";
+    }
+    return maintenance;
+};
+
+//get maintenance by id with car details
+export const getMaintenanceById = async (maintenanceId: number) => {
+    const maintenance = await db.select().from(MaintenanceTable)
+    .leftJoin(CarTable as any, eq(MaintenanceTable.carId, CarTable.carId))
+    .where(eq(MaintenanceTable.maintenanceId, maintenanceId));
+    return maintenance;
+};
+
+//update maintenance service
+export const updateMaintenanceService = async (id: number, maintenance: TIMaintenance) => {
+    await db.update(MaintenanceTable).set(maintenance).where(eq(MaintenanceTable.maintenanceId, id)).returning();
+    return "Maintenance update successfully";
+
+};
+
+//delete maintenance service
+export const deleteMaintenanceService = async (id: number) => {
+    const deleted = await db.delete(MaintenanceTable).where(eq(MaintenanceTable.maintenanceId, id)).returning();
+    if (deleted.length === 0) {
+        return "Maintenance not found";
+    }
+    return "Maintenance deleted successfully";
+};
