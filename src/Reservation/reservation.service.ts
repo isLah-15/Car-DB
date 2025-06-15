@@ -13,21 +13,28 @@ export const createReservationService = async (reservation: TIReservation) => {
         return null;
 };
 
-//get all reservation service
+// Get all reservations 
 export const getAllReservationService = async () => {
-    const reservation = await db.select().from(ReservationTable);
-    if (reservation.length === 0) {
-        return "No reservation found";
-    }
-    return reservation;
+  const reservations = await db.query.ReservationTable.findMany();
+
+  if (!reservations || reservations.length === 0) {
+    return "No reservation found";
+  }
+
+  return reservations;
 };
 
-//get reservation by id
+// Get reservation by ID
 export const getReservationById = async (reservationId: number) => {
-    const reservation = await db.query.ReservationTable.findFirst({
-        where: eq(ReservationTable.reservationId, reservationId)
-    })
-    return reservation;
+  const reservation = await db.query.ReservationTable.findFirst({
+    where: eq(ReservationTable.reservationId, reservationId),
+  });
+
+  if (!reservation) {
+    return "Reservation not found";
+  }
+
+  return reservation;
 };
 
 //update reservation service

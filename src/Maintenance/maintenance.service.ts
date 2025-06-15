@@ -11,22 +11,35 @@ export const createMaintenanceService = async (maintenance: TIMaintenance) => {
         return null;
 };
 
-//get all maintenance service with car details
+// Get all maintenance records with car details
 export const getAllMaintenanceService = async () => {
-    const maintenance = await db.select().from(MaintenanceTable)
-    .leftJoin(CarTable as any, eq(MaintenanceTable.carId, CarTable.carId));
-    if (maintenance.length === 0) {
-        return "No maintenance found";
-    }
-    return maintenance;
+  const maintenance = await db.query.MaintenanceTable.findMany({
+    with: {
+      car: true,
+    },
+  });
+
+  if (!maintenance || maintenance.length === 0) {
+    return "No maintenance found";
+  }
+
+  return maintenance;
 };
 
-//get maintenance by id with car details
+// Get maintenance by ID with car details
 export const getMaintenanceById = async (maintenanceId: number) => {
-    const maintenance = await db.select().from(MaintenanceTable)
-    .leftJoin(CarTable as any, eq(MaintenanceTable.carId, CarTable.carId))
-    .where(eq(MaintenanceTable.maintenanceId, maintenanceId));
-    return maintenance;
+  const maintenance = await db.query.MaintenanceTable.findMany({
+    
+    with: {
+      car: true,
+    },
+  });
+
+  if (!maintenance) {
+    return "Maintenance not found";
+  }
+
+  return maintenance;
 };
 
 //update maintenance service

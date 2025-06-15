@@ -11,22 +11,33 @@ export const createLocationService = async (location: TILocation) => {
         return null;
 };
 
-//get all location service
+// Get all locations (future-proofed with optional relations if needed)
 export const getAllLocationService = async () => {
-    const location = await db.select().from(LocationTable);
-    if (location.length === 0) {
-        return "No location found";
-    }
-    return location;
+  const locations = await db.query.LocationTable.findMany({
+    
+  });
+
+  if (locations.length === 0) {
+    return "No locations found";
+  }
+
+  return locations;
 };
 
-//get location by id
+// Get a location by ID with optional relations
 export const getLocationById = async (locationId: number) => {
-    const location = await db.query.LocationTable.findFirst({
-        where: eq(LocationTable.locationId, locationId)
-    })
-    return location;
+  const location = await db.query.LocationTable.findFirst({
+    where: eq(LocationTable.locationId, locationId),
+
+  });
+
+  if (!location) {
+    return "Location not found";
+  }
+
+  return location;
 };
+
 
 //update location service
 export const updateLocationService = async (id: number, location: TILocation) => {

@@ -11,28 +11,45 @@ export const createBookingService = async (booking: TIBooking) => {
         return null;
 };
 
-//get all bookings service with customer,car, and payment details
+
+
+// get all bookings service with customer, car, and payment details
 export const getAllBookingService = async () => {
-    const bookings = await db.select().from(BookingTable)
-    .leftJoin(CustomerTable as any, eq(BookingTable.customerId, CustomerTable.customerId))
-    .leftJoin(CarTable as any, eq(BookingTable.carId, CarTable.carId))
-    .leftJoin(PaymentTable as any, eq(BookingTable.bookingId, PaymentTable.bookingId));
-    if (bookings.length === 0) {
-        return "No bookings found";
-    }
-    return bookings;
+  const bookings = await db.query.BookingTable.findMany({
+    with: {
+      customer: true,
+      car: true,
+      payments: true,
+    },
+  });
+
+  if (bookings.length === 0) {
+    return "No bookings found";
+  }
+
+  return bookings;
 };
 
-//get bookings by id with customer,car, and payment details
+// get all bookings by Id service with customer, car, and payment details
 export const getBookingsById = async (bookingId: number) => {
-    const bookings = await db.select().from(BookingTable)
-    .leftJoin(CustomerTable as any, eq(BookingTable.customerId, CustomerTable.customerId))
-    .leftJoin(CarTable as any, eq(BookingTable.carId, CarTable.carId))
-    .leftJoin(PaymentTable as any, eq(BookingTable.bookingId, PaymentTable.bookingId))
-    .where(eq(BookingTable.bookingId, bookingId));
-    return bookings;
+  const booking = await db.query.BookingTable.findMany({
+    
+    with: {
+      customer: true,
+      car: true,
+      payments: true,
+    },
+  });
 
+  if (!booking || booking.length === 0) {
+    return "Booking not found";
+  }
+
+  return booking;
 };
+
+
+
 
 //update booking service
 export const updateBookingService = async (id: number, booking: TIBooking) => {

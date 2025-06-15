@@ -11,22 +11,34 @@ export const createInsuranceService = async (insurance: TIInsurance) => {
         return null;
 };
 
-//get all insurance service with car details
+// get all insurance service with car details
 export const getAllInsuranceService = async () => {
-    const insurance = await db.select().from(InsuranceTable)
-    .leftJoin(CarTable as any, eq(InsuranceTable.carId, CarTable.carId));
-    if (insurance.length === 0) {
-        return "No insurance found";
-    }
-    return insurance;
+  const insurances = await db.query.InsuranceTable.findMany({
+    with: {
+      car: true,
+    },
+  });
+
+  if (insurances.length === 0) {
+    return "No insurance found";
+  }
+
+  return insurances;
 };
 
-//get insurance by id with car details
+// get insurance by id with car details
 export const getInsuranceById = async (insuranceId: number) => {
-    const insurance = await db.select().from(InsuranceTable)
-    .leftJoin(CarTable as any, eq(InsuranceTable.carId, CarTable.carId))
-    .where(eq(InsuranceTable.insuranceId, insuranceId));
-    return insurance;
+  const insurance = await db.query.InsuranceTable.findFirst({
+    with: {
+      car: true,
+    },
+  });
+
+  if (!insurance) {
+    return "Insurance not found";
+  }
+
+  return insurance;
 };
 
 //update insurance service

@@ -12,22 +12,34 @@ export const createPaymentService = async (payment: TIPayment) => {
         return null;
 };
 
-//get all payment service with booking details
+// Get all payments with booking details
 export const getAllPaymentService = async () => {
-    const payment = await db.select().from(PaymentTable)
-    .leftJoin(BookingTable as any, eq(PaymentTable.bookingId, BookingTable.bookingId));
-    if (payment.length === 0) {
-        return "No payments found";
-    }
-    return payment;
+  const payments = await db.query.PaymentTable.findMany({
+    with: {
+      booking: true, // assumes `booking` is defined in relations for PaymentTable
+    },
+  });
+
+  if (!payments || payments.length === 0) {
+    return "No payments found";
+  }
+
+  return payments;
 };
 
-//get payment by id with booking details
+// Get a payment by ID with booking details
 export const getPaymentById = async (paymentId: number) => {
-    const payment = await db.select().from(PaymentTable)
-    .leftJoin(BookingTable as any, eq(PaymentTable.bookingId, BookingTable.bookingId))
-    .where(eq(PaymentTable.paymentId, paymentId));
-    return payment;
+  const payment = await db.query.PaymentTable.findFirst({
+    with: {
+      booking: true,
+    },
+  });
+
+  if (!payment) {
+    return "Payment not found";
+  }
+
+  return payment;
 };
 
 //update payment service

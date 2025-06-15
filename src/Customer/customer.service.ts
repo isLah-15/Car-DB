@@ -16,20 +16,32 @@ export const createCustomerService = async (customer: TICustomer) => {
 
 //get all customer service with reservation details
 export const getAllCustomerService = async () => {
-    const customer = await db.select().from(CustomerTable)
-    .leftJoin(ReservationTable as any, eq(CustomerTable.customerId, ReservationTable.customerId));
-    if (customer.length === 0) {
-        return "No customers found";
-    }
-    return customer;
-};
+  const customers = await db.query.CustomerTable.findMany({
+    with: {
+      reservations: true,
+    },
+  });
 
+  if (customers.length === 0) {
+    return "No customers found";
+  }
+
+  return customers;
+};
+  
 //get customer by id with reservation details
-export const getCustomerById = async (customerId: number) => {
-    const customer = await db.select().from(CustomerTable)
-    .leftJoin(ReservationTable as any, eq(CustomerTable.customerId, ReservationTable.customerId))
-    .where(eq(CustomerTable.customerId, customerId));
-    return customer;
+export const getAllCustomerByIdService = async (customerId: number) => {
+  const customers = await db.query.CustomerTable.findMany({
+    with: {
+      reservations: true,
+    },
+  });
+
+  if (customers.length === 0) {
+    return "No customers found";
+  }
+
+  return customers;
 };
 
 //update customer service

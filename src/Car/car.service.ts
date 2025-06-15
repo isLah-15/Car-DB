@@ -12,28 +12,40 @@ export const createCarService = async (car: TICar) => {
         return null;
 };
 
-//get all car service with reservsations, bookings, maintenance, and insurance details
+//get all car service with reservations, bookings, maintenance, and insurance details
 export const getAllCarService = async () => {
-    const car = await db.select().from(CarTable)
-    .leftJoin(ReservationTable as any, eq(CarTable.carId, ReservationTable.carId))
-    .leftJoin(BookingTable as any, eq(CarTable.carId, BookingTable.carId))
-    .leftJoin(MaintenanceTable as any, eq(CarTable.carId, MaintenanceTable.carId))
-    .leftJoin(InsuranceTable as any, eq(CarTable.carId, InsuranceTable.carId));
-    if (car.length === 0) {
-        return "No cars found";
+  const cars = await db.query.CarTable.findMany({
+    with: {
+      reservations: true,
+      bookings: true,
+      maintenance: true,
+      insurance: true,
     }
-    return car;
+  });
+
+  if (cars.length === 0) {
+    return "No cars found";
+  }
+  return cars;
 };
 
-//get car by id with reservsations, bookings, maintenance, and insurance details
+//get car by id with reservations, bookings, maintenance, and insurance details
 export const getCarById = async (carId: number) => {
-    const car = await db.select().from(CarTable)
-    .leftJoin(ReservationTable as any, eq(CarTable.carId, ReservationTable.carId))
-    .leftJoin(BookingTable as any, eq(CarTable.carId, BookingTable.carId))
-    .leftJoin(MaintenanceTable as any, eq(CarTable.carId, MaintenanceTable.carId))
-    .leftJoin(InsuranceTable as any, eq(CarTable.carId, InsuranceTable.carId))
-    .where(eq(CarTable.carId, carId));
-    return car;
+  const car = await db.query.CarTable.findFirst({
+    where: eq(CarTable.carId, carId),
+    with: {
+      reservations: true,
+      bookings: true,
+      maintenance: true,
+      insurance: true,
+    },
+  });
+
+  if (!car) {
+    return "Car not found";
+  }
+
+  return car;
 };
 
 //update car service

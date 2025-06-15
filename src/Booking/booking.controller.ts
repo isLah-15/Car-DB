@@ -1,5 +1,4 @@
 
-
 import { Request, Response } from "express";
 import { createBookingService, deleteBookingService, getAllBookingService, getBookingsById, updateBookingService } from "./booking.service";
 

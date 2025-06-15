@@ -47,6 +47,7 @@ const booking = (app:Express) => {
 
     // update booking by id
     app.route('/booking/:id').put(
+        bothRoleAuth,
         async(req, res, next) => {
             try {
                 await updateBookingController(req, res)
@@ -59,6 +60,7 @@ const booking = (app:Express) => {
 
     // delete booking by id
     app.route('/booking/:id').delete(
+        bothRoleAuth,
         async(req, res, next) => {
             try {
                 await deleteBookingController(req, res)

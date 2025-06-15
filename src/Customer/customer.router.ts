@@ -1,5 +1,6 @@
 import { Express } from "express";
 import { createCustomerController, deleteCustomerController, getAllCustomersController, getCustomerByIdController, updateCustomerController } from "./customer.controller";
+import { adminRoleAuth, bothRoleAuth } from "../Middleware/bearAuth";
 
 const customerRoutes = (app: Express) => {
 
@@ -18,6 +19,7 @@ const customerRoutes = (app: Express) => {
 
   // Get all customers
   app.route('/customer').get(
+          adminRoleAuth,
           async(req, res, next) => {
               try {
                   await getAllCustomersController(req, res)
@@ -30,6 +32,7 @@ const customerRoutes = (app: Express) => {
 
   // Get a customer by ID
 app.route('/customer/:id').get(
+        bothRoleAuth,
         async(req, res, next) => {
             try {
                 await getCustomerByIdController(req, res)
@@ -42,6 +45,7 @@ app.route('/customer/:id').get(
 
   // Update a customer by ID
   app.route('/customer/:id').put(
+          bothRoleAuth,
           async(req, res, next) => {
               try {
                   await updateCustomerController(req, res)

@@ -119,7 +119,8 @@ export const deleteCarController = async (req: Request, res: Response) => {
         if (!deleted) {
             return res.status(404).json({message: "Car not found"})
         }
-        res.sendStatus(204).json({ message: "Car deleted successfully" });
+        return res.status(200).json({ message: "Car deleted successfully" });
+
 
     } catch (error: any) {
         return res.status(500).json({ message: "Internal server error", error: error.message });
