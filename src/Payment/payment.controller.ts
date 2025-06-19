@@ -47,7 +47,8 @@ export const getPaymentByIdController = async (req: Request, res: Response) => {
         }
 
         const payment = await getPaymentById(paymentId);
-        if (!payment) {
+        console.log("mmmmmmmmmmmmmmmmmmmmmmm", payment)
+        if (payment == "Payment not found") {
             return res.status(404).json({message: "Payment not found"});
         }
 
@@ -119,7 +120,7 @@ export const deletePaymentController = async (req: Request, res: Response) => {
         };
 
         const deleted = await deletePaymentService(paymentId);
-        if (!deleted) {
+        if (deleted == "Payment not found") {
             return res.status(404).json({message: "Payment not found"})
         } res.sendStatus(204).json({ message: "Payment deleted successfully" });
 

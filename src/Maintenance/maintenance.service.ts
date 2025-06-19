@@ -42,12 +42,17 @@ export const getMaintenanceById = async (maintenanceId: number) => {
   return maintenance;
 };
 
-//update maintenance service
-export const updateMaintenanceService = async (id: number, maintenance: TIMaintenance) => {
-    await db.update(MaintenanceTable).set(maintenance).where(eq(MaintenanceTable.maintenanceId, id)).returning();
-    return "Maintenance update successfully";
+// Update maintenance by ID 
+export const updateMaintenanceService = async (id: number, maintenance: any) => {
+  const [updated] = await db
+    .update(MaintenanceTable)
+    .set(maintenance)
+    .where(eq(MaintenanceTable.maintenanceId, id))
+    .returning(); // Make sure `.returning()` is used
 
+  return updated || null;
 };
+
 
 //delete maintenance service
 export const deleteMaintenanceService = async (id: number) => {

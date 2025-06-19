@@ -85,11 +85,11 @@ export const updateReservationController = async (req: Request, res: Response) =
             reservation.reservationDate = new Date(reservation.reservationDate);
         };
 
-        //Check if the reservation exists
-        const existingReservation = await getReservationById(reservationId);
-        if (!existingReservation) {
-            return res.status(404).json({ message: "Reservation not found" });
-        };
+        // //Check if the reservation exists
+        // const existingReservation = await getReservationById(reservationId);
+        // if (!existingReservation) {
+        //     return res.status(404).json({ message: "Reservation not found" });
+        // };
 
         //Check if the reservation ID is provided in the request body
         if (!reservation.reservationId) {

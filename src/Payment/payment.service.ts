@@ -30,6 +30,7 @@ export const getAllPaymentService = async () => {
 // Get a payment by ID with booking details
 export const getPaymentById = async (paymentId: number) => {
   const payment = await db.query.PaymentTable.findFirst({
+    where: eq(PaymentTable.paymentId, paymentId),
     with: {
       booking: true,
     },

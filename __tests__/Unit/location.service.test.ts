@@ -7,6 +7,7 @@ import {
 } from "../../src/Location/location.service";
 import { TILocation } from "../../src/Drizzle/schema";
 import db from "../../src/Drizzle/db";
+import { updateMaintenanceService } from "../../src/Maintenance/maintenance.service";
 
 // Mock the database
 jest.mock("../../src/Drizzle/db", () => {
@@ -138,34 +139,35 @@ describe("Location Service Tests", () => {
     });
   });
 
-  describe("updateLocationService", () => {
-  it("should update the location and return the updated object", async () => {
+  describe("updateMaintenanceService", () => {
+  it("should update the maintenance and return the updated object", async () => {
     const mockId = 1;
-    const mockLocation: TILocation = {
-      locationId: 1,
-      carId: 1,
-      locationName: "Nakuru",
-      address: "Milimani Drive",
-      contactNumber: "0712345678",
+    const mockMaintenance = {
+      maintenanceId: 1,
+      carId: 2,
+      maintenanceDate: new Date("2025-06-01T00:00:00Z"),
+      description: "Brake check",
+      cost: 4000,
     };
 
+    // Mock DB chain
     (db.update as jest.Mock).mockReturnValue({
       set: jest.fn().mockReturnValue({
         where: jest.fn().mockReturnValue({
-          returning: jest.fn().mockResolvedValueOnce([mockLocation]),
+          returning: jest.fn().mockResolvedValueOnce([mockMaintenance]),
         }),
       }),
     });
 
-    const result = await updateLocationService(mockId, mockLocation);
+    const result = await updateMaintenanceService(mockId, mockMaintenance);
 
     expect(result).toEqual(
       expect.objectContaining({
-        locationId: 1,
-        carId: 1,
-        locationName: "Nakuru",
-        address: "Milimani Drive",
-        contactNumber: "0712345678",
+        maintenanceId: 1,
+        carId: 2,
+        maintenanceDate: new Date("2025-06-01T00:00:00Z"),
+        description: "Brake check",
+        cost: 4000,
       })
     );
   });

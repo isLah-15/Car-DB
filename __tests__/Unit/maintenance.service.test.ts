@@ -2,8 +2,9 @@ import {
   createMaintenanceService, deleteMaintenanceService, getAllMaintenanceService, getMaintenanceById, updateMaintenanceService,
 } from "../../src/Maintenance/maintenance.service";
 
-import { TIMaintenance } from "../../src/Drizzle/schema";
+import { MaintenanceTable, TIMaintenance } from "../../src/Drizzle/schema";
 import db from "../../src/Drizzle/db";
+import { eq } from "drizzle-orm";
 
 jest.mock("../../src/Drizzle/db", () => {
   const returningMock = jest.fn();
@@ -117,27 +118,51 @@ describe("Maintenance Service Tests", () => {
   });
 
   describe("updateMaintenanceService", () => {
-    it("should return success message after update", async () => {
-      const mockMaintenance: TIMaintenance = {
-        maintenanceId: 1,
-        carId: 2,
-        maintenanceDate: new Date("2025-06-01"),
-        description: "Brake check",
-        cost: 4000,
-      };
+  it("should return the updated maintenance object", async () => {
+    const mockMaintenance = {
+      carId: 2,
+      maintenanceDate: new Date("2025-06-01"),
+      description: "Brake check",
+      cost: 4000,
+    };
 
-      (db.update as jest.Mock).mockReturnValue({
-        set: jest.fn().mockReturnValue({
-          where: jest.fn().mockReturnValue({
-            returning: jest.fn().mockResolvedValueOnce([mockMaintenance]),
-          }),
-        }),
-      });
+    // Mock db.update().set().where().returning()
+    const mockReturning = jest.fn().mockResolvedValueOnce([mockMaintenance]);
+    const mockWhere = jest.fn(() => ({ returning: mockReturning }));
+    const mockSet = jest.fn(() => ({ where: mockWhere }));
+    (db.update as jest.Mock).mockImplementation(() => ({
+      set: mockSet,
+    }));
 
-      const result = await updateMaintenanceService(1, mockMaintenance);
-      expect(result).toBe("Maintenance update successfully");
-    });
+    const result = await updateMaintenanceService(1, mockMaintenance);
+
+    expect(result).toEqual(mockMaintenance);
+    expect(mockSet).toHaveBeenCalledWith(mockMaintenance);
+    expect(mockWhere).toHaveBeenCalledWith(eq(MaintenanceTable.maintenanceId, 1));
   });
+
+  it("should return null if update returns empty array", async () => {
+    const mockMaintenance = {
+      maintenanceId: 1,
+      carId: 2,
+      maintenanceDate: new Date("2025-06-01"),
+      description: "Brake check",
+      cost: 4000,
+    };
+
+    // Simulate no match (empty array)
+    const mockReturning = jest.fn().mockResolvedValueOnce([]);
+    const mockWhere = jest.fn(() => ({ returning: mockReturning }));
+    const mockSet = jest.fn(() => ({ where: mockWhere }));
+    (db.update as jest.Mock).mockImplementation(() => ({
+      set: mockSet,
+    }));
+
+    const result = await updateMaintenanceService(1, mockMaintenance);
+
+    expect(result).toBeNull();
+  });
+});
 
   describe("deleteMaintenanceService", () => {
     it("should return success message if deleted", async () => {
