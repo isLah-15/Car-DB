@@ -28,27 +28,33 @@ export const getAllCustomerService = async () => {
 
   return customers;
 };
-  
-//get customer by id with reservation details
+
+//get all customer id with reservations
 export const getAllCustomerByIdService = async (customerId: number) => {
-  const customers = await db.query.CustomerTable.findMany({
+  const customer = await db.query.CustomerTable.findFirst({
+    where: eq(CustomerTable.customerId, customerId),
     with: {
       reservations: true,
     },
   });
 
-  if (customers.length === 0) {
+  if (!customer) {
     return "No customers found";
   }
 
-  return customers;
+  return customer;
 };
 
-//update customer service
-export const updateCustomerService = async (id: number, customer: TICustomer) => {
-    await db.update(CustomerTable).set(customer).where(eq(CustomerTable.customerId, id)).returning();
-    return "Customer update successfully";
 
+// Update a customer service
+export const updateCustomerService = async (id: number, customer: TICustomer) => {
+    const [updated] = await db
+        .update(CustomerTable)
+        .set(customer)
+        .where(eq(CustomerTable.customerId, id))
+        .returning(); // This ensures the updated row is returned
+
+    return updated; // Return the actual updated customer
 };
 
 //delete customer service

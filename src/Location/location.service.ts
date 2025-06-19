@@ -39,11 +39,16 @@ export const getLocationById = async (locationId: number) => {
 };
 
 
-//update location service
-export const updateLocationService = async (id: number, location: TILocation) => {
-    await db.update(LocationTable).set(location).where(eq(LocationTable.locationId, id)).returning();
-    return "Location update successfully";
+export const updateLocationService = async (id: number, location: any) => {
+  const [updated] = await db
+    .update(LocationTable)
+    .set(location)
+    .where(eq(LocationTable.locationId, id))
+    .returning(); // Make sure `.returning()` is used
+
+  return updated || null;
 };
+
 
 //delete location service
 export const deleteLocationService = async (id: number) => {

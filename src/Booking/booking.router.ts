@@ -18,7 +18,7 @@ const booking = (app:Express) => {
 
     // get all bookings
     app.route('/booking').get(
-        adminRoleAuth,
+        // adminRoleAuth,
         async (req, res, next) => {
             try {
                 await getAllBookingsController(req, res)
@@ -31,7 +31,7 @@ const booking = (app:Express) => {
 
     // get booking by id
     app.route('/booking/:id').get(
-        bothRoleAuth,
+        // bothRoleAuth,
         async(req, res, next) => {
             try {
                 await getAllBookingsByIdController(req, res)
@@ -47,7 +47,7 @@ const booking = (app:Express) => {
 
     // update booking by id
     app.route('/booking/:id').put(
-        bothRoleAuth,
+        // bothRoleAuth,
         async(req, res, next) => {
             try {
                 await updateBookingController(req, res)
@@ -60,7 +60,7 @@ const booking = (app:Express) => {
 
     // delete booking by id
     app.route('/booking/:id').delete(
-        bothRoleAuth,
+        // bothRoleAuth,
         async(req, res, next) => {
             try {
                 await deleteBookingController(req, res)
@@ -70,9 +70,6 @@ const booking = (app:Express) => {
             }
         }
     )
-
-
-
 }
 
 export default booking

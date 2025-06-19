@@ -1,7 +1,13 @@
-
+ 
 import { Request, Response } from "express";
 
-import { createCarService, deleteCarService, getAllCarService, getCarById, updateCarService } from "./car.service";
+import { 
+    createCarService,
+    deleteCarService,
+    getAllCarService,
+    getCarById,
+    updateCarService
+} from "./car.service";
 
 // Create a new car
 export const createCarController = async (req: Request, res: Response) => {
@@ -116,8 +122,9 @@ export const deleteCarController = async (req: Request, res: Response) => {
         };
 
         const deleted = await deleteCarService(carId);
-        if (!deleted) {
-            return res.status(404).json({message: "Car not found"})
+        if (deleted == "Car not found") {
+            res.status(404).json({message: "Car not found"})
+            return;
         }
         return res.status(200).json({ message: "Car deleted successfully" });
 

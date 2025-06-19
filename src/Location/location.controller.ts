@@ -96,25 +96,26 @@ export const updateLocationController = async (req: Request, res: Response) => {
     }
 };
 
-// Delete a location by id
 export const deleteLocationController = async (req: Request, res: Response) => {
-    try {
-        const locationId = parseInt(req.params.id);
-        if(isNaN(locationId)) {
-            return res.status(400).json({ message: "Invalid location ID" });
-        }
-
-        const existingLocation = await getLocationById(locationId);
-        if (!existingLocation) {
-            return res.status(404).json({ message: "Location not found" });
-        };
-
-        const deleted = await deleteLocationService(locationId);
-        if (!deleted) {
-            return res.status(404).json({message: "Location not found"})
-        } res.sendStatus(204).json({ message: "Location deleted successfully" });
-
-    } catch (error: any) {
-        return res.status(500).json({ message: "Internal server error", error: error.message });
+  try {
+    const locationId = parseInt(req.params.id);
+    if (isNaN(locationId)) {
+      return res.status(400).json({ message: "Invalid location ID" });
     }
+
+    const existingLocation = await getLocationById(locationId);
+    if (!existingLocation) {
+      return res.status(404).json({ message: "Location not found" });
+    }
+
+    const deleted = await deleteLocationService(locationId);
+    if (!deleted) {
+      return res.status(404).json({ message: "Location not found" });
+    }
+
+    return res.sendStatus(204); // ✅ Correct usage
+
+  } catch (error: any) {
+    return res.status(500).json({ message: "Internal server error", error: error.message });
+  }
 };

@@ -40,6 +40,7 @@ jest.mock("../../src/Drizzle/db", () => {
       query: {
         CustomerTable: {
           findMany: findManyMock,
+          findFirst: jest.fn()
         },
       },
     },
@@ -135,46 +136,53 @@ describe("Customer Service Tests", () => {
     });
   });
 
-  describe("getAllCustomersbyIdService", () => {
-    it("should return all customers with reservations if found", async () => {
-        const mockCustomerId = 1;
-        const mockCustomers = [
+
+  //by Id
+ describe("getAllCustomersbyIdService", () => {
+  it("should return customer with reservations if found", async () => {
+    const mockCustomerId = 1;
+    const mockCustomer = {
+      customerId: 1,
+      fullName: "John Doe",
+      email: "john@example.com",
+      phone: "0712345678",
+      address: "123 Main St",
+      isVerified: false,
+      reservations: [
         {
-          customerId: 1,
-          fullName: "John Doe",
-          email: "john@example.com",
-          phone: "0712345678",
-          address: "123 Main St",
-          isVerified: false,
-          reservations: [
-            {
-              bookingId: 1,
-              carId: 2,
-              rentalStartDate: new Date("2025-06-05"),
-              rentalEndDate: new Date("2025-06-10"),
-              totalAmount: 15000,
-              car: { carId: 2, model: "Toyota" },
-              payments: [{ paymentId: 1, amountPaid: 15000 }],
-            },
-          ],
+          bookingId: 1,
+          carId: 2,
+          rentalStartDate: new Date("2025-06-05"),
+          rentalEndDate: new Date("2025-06-10"),
+          totalAmount: 15000,
+          car: { carId: 2, model: "Toyota" },
+          payments: [{ paymentId: 1, amountPaid: 15000 }],
         },
-      ];
+      ],
+    };
 
-      (db.query.CustomerTable.findMany as jest.Mock).mockResolvedValueOnce(mockCustomers);
+    // ✅ Correct mock
+    (db.query.CustomerTable.findFirst as jest.Mock).mockResolvedValueOnce(mockCustomer);
 
-      const result = await getAllCustomerByIdService(mockCustomerId);
-      expect(result).toEqual(mockCustomers);
-    });
+    const result = await getAllCustomerByIdService(mockCustomerId);
 
-    it("should return 'No customers found' if database returns empty array", async () => {
-        const mockCustomerId = 999;
-        (db.query.CustomerTable.findMany as jest.Mock).mockResolvedValueOnce([]);
-
-      const result = await getAllCustomerByIdService(mockCustomerId);
-      expect(result).toBe("No customers found");
-    });
+    expect(db.query.CustomerTable.findFirst).toHaveBeenCalled();
+    expect(result).toEqual(mockCustomer);
   });
 
+  it("should return 'No customers found' if database returns null", async () => {
+    const mockCustomerId = 999;
+
+    // ✅ Return null to simulate not found
+    (db.query.CustomerTable.findFirst as jest.Mock).mockResolvedValueOnce(null);
+
+    const result = await getAllCustomerByIdService(mockCustomerId);
+    expect(result).toBe("No customers found");
+  });
+});
+
+  
+  //update
   describe("updateCustomerService", () => {
     it("should update the customer and return success message", async () => {
       const mockId = 1;
@@ -199,9 +207,12 @@ describe("Customer Service Tests", () => {
       });
 
       const result = await updateCustomerService(mockId, mockCustomer);
-      expect(result).toBe("Customer update successfully");
+      expect(result).toEqual(mockCustomer);
     });
   });
+
+
+  //delete
     describe("deleteCustomerService", () => {
         it("should delete the customer and return success message", async () => {
         const mockId = 1;

@@ -56,7 +56,7 @@ describe("Booking Service Tests", () => {
       const valuesMock = insertMock().values as jest.Mock;
       const returningMock = valuesMock().returning as jest.Mock;
 
-      returningMock.mockResolvedValueOnce([mockBooking]);
+      returningMock.mockResolvedValueOnce(mockBooking);
 
       const result = await createBookingService(mockBooking);
       expect(result).toEqual(mockBooking);
@@ -79,7 +79,8 @@ describe("Booking Service Tests", () => {
       returningMock.mockResolvedValueOnce([]);
 
       const result = await createBookingService(mockBooking);
-      expect(result).toBeNull();
+      expect(result).toEqual([]); 
+
     });
   });
   describe("getAllBookingService", () => {

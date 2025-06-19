@@ -11,7 +11,7 @@ jest.mock("../../src/Drizzle/db", () => ({
     query: {
         CarTable: {
             findMany: jest.fn(),
-            findfirst: jest.fn(),
+            findFirst: jest.fn(),
         }
     }
 
@@ -95,68 +95,37 @@ describe("Car Service Tests", () => {
     });
 
     describe("get a car by ID", () => {
-  // ...existing tests
-
-    it("should return a car by ID with related details", async () => {
-    const mockCar = [
-      {
-        carId: 1,
-        carModel: "Camry",
-        manufacturer: "Toyota",
-        year: 2020,
-        color: "Blue",
-        rentalRate: 100,
-        availability: true,
-        reservations: [{ reservationId: 101 }],
-        bookings: [{ bookingId: 201 }],
-        maintenance: [{ maintenanceId: 301 }],
-        insurance: [{ insuranceId: 401 }],
-      }
-      // {
-      //   carId: 2,
-      //   carModel: "Civic",
-      //   manufacturer: "Honda",
-      //   year: 2019,
-      //   color: "Red",
-      //   rentalRate: 90,
-      //   availability: true,
-      //   reservations: [],
-      //   bookings: [],
-      //   maintenance: [],
-      //   insurance: [],
-      // }
-    ];
+  it("should return a car by ID with related details", async () => {
+    const mockCar = {
+      carId: 1,
+      carModel: "Camry",
+      manufacturer: "Toyota",
+      year: 2020,
+      color: "Blue",
+      rentalRate: 100,
+      availability: true,
+      reservations: [{ reservationId: 101 }],
+      bookings: [{ bookingId: 201 }],
+      maintenance: [{ maintenanceId: 301 }],
+      insurance: [{ insuranceId: 401 }],
+    };
 
     (db.query.CarTable.findFirst as jest.Mock).mockResolvedValueOnce(mockCar);
 
     const result = await getCarById(1);
-    expect(db.query.CarTable.findFirst).toHaveBeenCalled()
-    // expect(result).toEqual(mockCars[0]);
-    });
+    expect(db.query.CarTable.findFirst).toHaveBeenCalled();
+    expect(result).toEqual(mockCar);
+  });
 
-    it("should return 'Car not found' if ID does not match", async () => {
-    const mockCars = [
-      {
-        carId: 2,
-        carModel: "Civic",
-        manufacturer: "Honda",
-        year: 2019,
-        color: "Red",
-        rentalRate: 90,
-        availability: true,
-        reservations: [],
-        bookings: [],
-        maintenance: [],
-        insurance: [],
-      }
-    ];
 
-    (db.query.CarTable.findFirst as jest.Mock).mockResolvedValueOnce(mockCars);
+  it("should return 'Car not found' if ID does not match", async () => {
+    (db.query.CarTable.findFirst as jest.Mock).mockResolvedValueOnce(null);
 
-    const result = await getCarById(999); // ID doesn't exist
+    const result = await getCarById(999);
     expect(result).toEqual("Car not found");
-    });
-    });
+  });
+});
+
 
     describe("update car", () => {
         it("should update a car and return a success message", async () => {
@@ -216,14 +185,6 @@ describe("Car Service Tests", () => {
     expect(result).toBe("Car not found");
   });
 });
-
-    
-
-           
-
-
-
-
 });
 
 

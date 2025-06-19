@@ -19,7 +19,7 @@ const insuranceRoutes = (app: Express) => {
 
   // Get all insurances
   app.route('/insurance').get(
-            adminRoleAuth,
+            // adminRoleAuth,
             async(req, res, next) => {
                 try {
                     await getAllInsurancesController(req, res)

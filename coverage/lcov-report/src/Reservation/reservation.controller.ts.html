@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">12.94% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/85</span>
+                <span class='fraction'>11/85</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">7.5% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/80</span>
+                <span class='fraction'>6/80</span>
             </div>
         
             
@@ -225,12 +225,12 @@
 <a name='L160'></a><a href='#L160'>160</a>
 <a name='L161'></a><a href='#L161'>161</a>
 <a name='L162'></a><a href='#L162'>162</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -264,7 +264,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -277,11 +277,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -297,11 +297,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -365,7 +365,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -386,10 +386,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Request, Response } from "express";
-<span class="cstat-no" title="statement not covered" >import { createReservationService, deleteReservationService, getAllReservationService, getReservationById, updateReservationService } from "./reservation.service";</span>
+import { createReservationService, deleteReservationService, getAllReservationService, getReservationById, updateReservationService } from "./reservation.service";
 &nbsp;
 // Create a reservation
-export const <span class="cstat-no" title="statement not covered" >createReservationCarController = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >a</span>sync </span>(req: Request, res: Response) =&gt; {</span>
+export const createReservationCarController = <span class="fstat-no" title="function not covered" >async </span>(req: Request, res: Response) =&gt; {
 <span class="cstat-no" title="statement not covered" >    try {</span>
         const reservation = <span class="cstat-no" title="statement not covered" >req.body;</span>
 &nbsp;
@@ -425,7 +425,7 @@ export const <span class="cstat-no" title="statement not covered" >createReserva
 &nbsp;
 &nbsp;
 // Get all reservations
-export const <span class="cstat-no" title="statement not covered" >getAllReservationsController = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >a</span>sync </span>(req: Request, res: Response) =&gt; {</span>
+export const getAllReservationsController = <span class="fstat-no" title="function not covered" >async </span>(req: Request, res: Response) =&gt; {
 <span class="cstat-no" title="statement not covered" >    try {</span>
         const reservations = <span class="cstat-no" title="statement not covered" >await getAllReservationService();</span>
 <span class="cstat-no" title="statement not covered" >        if (reservations.length === 0) {</span>
@@ -438,7 +438,7 @@ export const <span class="cstat-no" title="statement not covered" >getAllReserva
 };
 &nbsp;
 //Get a reservation by id
-export const <span class="cstat-no" title="statement not covered" >getReservationByIdController = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >a</span>sync </span>(req: Request, res: Response) =&gt; {</span>
+export const getReservationByIdController = <span class="fstat-no" title="function not covered" >async </span>(req: Request, res: Response) =&gt; {
 <span class="cstat-no" title="statement not covered" >    try {</span>
         const reservationId = <span class="cstat-no" title="statement not covered" >parseInt(req.params.id);</span>
 <span class="cstat-no" title="statement not covered" >        if(isNaN(reservationId)){</span>
@@ -458,7 +458,7 @@ export const <span class="cstat-no" title="statement not covered" >getReservatio
 };
 &nbsp;
 // Update a reservation by id
-export const <span class="cstat-no" title="statement not covered" >updateReservationController = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >a</span>sync </span>(req: Request, res: Response) =&gt; {</span>
+export const updateReservationController = <span class="fstat-no" title="function not covered" >async </span>(req: Request, res: Response) =&gt; {
 <span class="cstat-no" title="statement not covered" >    try {</span>
         const reservationId = <span class="cstat-no" title="statement not covered" >parseInt(req.params.id);</span>
 <span class="cstat-no" title="statement not covered" >        if(isNaN(reservationId)) {</span>
@@ -526,7 +526,7 @@ export const <span class="cstat-no" title="statement not covered" >updateReserva
 };
 &nbsp;
 // Delete a reservation by id
-export const <span class="cstat-no" title="statement not covered" >deleteReservationController = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >a</span>sync </span>(req: Request, res: Response) =&gt; {</span>
+export const deleteReservationController = <span class="fstat-no" title="function not covered" >async </span>(req: Request, res: Response) =&gt; {
 <span class="cstat-no" title="statement not covered" >    try {</span>
         const reservationId = <span class="cstat-no" title="statement not covered" >parseInt(req.params.id);</span>
 <span class="cstat-no" title="statement not covered" >        if(isNaN(reservationId)) {</span>
@@ -553,7 +553,7 @@ export const <span class="cstat-no" title="statement not covered" >deleteReserva
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-06-13T09:48:32.875Z
+                at 2025-06-18T11:16:48.791Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

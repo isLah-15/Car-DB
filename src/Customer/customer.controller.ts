@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import { createCustomerService, deleteCustomerService, getAllCustomerService, getCustomerById, updateCustomerService } from "./customer.service";
+import { createCustomerService, deleteCustomerService, getAllCustomerService, getAllCustomerByIdService, updateCustomerService } from "./customer.service";
+import { TICustomer } from "../Drizzle/schema";
 
 // Create a customer
 export const createCustomerController = async (req: Request, res: Response) => {
@@ -33,56 +34,63 @@ export const getAllCustomersController = async (req: Request, res: Response) => 
     }
 };
 
-//Get a customer by id
+// Get customer by ID
 export const getCustomerByIdController = async (req: Request, res: Response) => {
-    try {
-        const customerId = parseInt(req.params.id);
-        if(isNaN(customerId)){
-        return res.status(400).json({message: "Invalid ID"})
-        }
+  try {
+    const customerId = parseInt(req.params.id);
 
-        const customer = await getCustomerById(customerId);
-        if (!customer) {
-            return res.status(404).json({message: "Customer not found"});
-        }
+    if (isNaN(customerId)) {
+      return res.status(400).json({ message: "Invalid ID" });
+    }
 
-        return res.status(200).json({data: customer});
+    const result = await getAllCustomerByIdService(customerId);
 
-    } catch (error: any) {
-        return res.status(500).json({error: error.message});
-    };
+    if (!result) {
+      return res.status(404).json({ message: result });
+    }
+
+    return res.status(200).json({ data: result });
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message });
+  }
 };
+
+
+
+
 
 // Update a customer by id
 export const updateCustomerController = async (req: Request, res: Response) => {
     try {
         const customerId = parseInt(req.params.id);
-        if(isNaN(customerId)) {
+        console.log("vrfvrv ", customerId)
+        if (isNaN(customerId)) {
             return res.status(400).json({ message: "Invalid customer ID" });
         }
 
-        const customer = req.body;
+        const customer: TICustomer = req.body;
 
-        //Check if the customer exists
-        const existingCustomer = await getCustomerById(customerId);
+        // Check if the customer exists
+        const existingCustomer = await getAllCustomerByIdService(customerId);
+        console.log("gfewrger", existingCustomer)
         if (!existingCustomer) {
             return res.status(404).json({ message: "Customer not found" });
         }
 
-        //Check if the customer ID is provided in the request body
+        // Check if the customer ID is provided in the request body
         if (!customer.customerId) {
             return res.status(400).json({ message: "Customer ID is required" });
         }
 
-        //check if the customer ID in the request body matches the customer ID in the URL
+        // Check if the customer ID in the request body matches the customer ID in the URL
         if (customer.customerId !== customerId) {
             return res.status(400).json({ message: "Customer ID in request body does not match URL" });
         }
 
         // Update the customer
-        customer.customerId = customerId; // Ensure the customer ID is set for the update
-
+        customer.customerId = customerId; // Ensure ID is set
         const updatedCustomer = await updateCustomerService(customerId, customer);
+
         if (updatedCustomer) {
             return res.status(200).json({ message: "Customer updated successfully", data: updatedCustomer });
         } else {
@@ -102,7 +110,7 @@ export const deleteCustomerController = async (req: Request, res: Response) => {
             return res.status(400).json({ message: "Invalid customer ID" });
         }
 
-        const existingCustomer = await getCustomerById(customerId);
+        const existingCustomer = await getAllCustomerByIdService(customerId);
         if (!existingCustomer) {
             return res.status(404).json({ message: "Customer not found" });
         }

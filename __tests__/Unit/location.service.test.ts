@@ -139,28 +139,37 @@ describe("Location Service Tests", () => {
   });
 
   describe("updateLocationService", () => {
-    it("should update the location and return success message", async () => {
-      const mockId = 1;
-      const mockLocation: TILocation = {
+  it("should update the location and return the updated object", async () => {
+    const mockId = 1;
+    const mockLocation: TILocation = {
+      locationId: 1,
+      carId: 1,
+      locationName: "Nakuru",
+      address: "Milimani Drive",
+      contactNumber: "0712345678",
+    };
+
+    (db.update as jest.Mock).mockReturnValue({
+      set: jest.fn().mockReturnValue({
+        where: jest.fn().mockReturnValue({
+          returning: jest.fn().mockResolvedValueOnce([mockLocation]),
+        }),
+      }),
+    });
+
+    const result = await updateLocationService(mockId, mockLocation);
+
+    expect(result).toEqual(
+      expect.objectContaining({
         locationId: 1,
         carId: 1,
         locationName: "Nakuru",
         address: "Milimani Drive",
-        contactNumber: "0712345678"
-      };
-
-      (db.update as jest.Mock).mockReturnValue({
-        set: jest.fn().mockReturnValue({
-          where: jest.fn().mockReturnValue({
-            returning: jest.fn().mockResolvedValueOnce([mockLocation]),
-          }),
-        }),
-      });
-
-      const result = await updateLocationService(mockId, mockLocation);
-      expect(result).toBe("Location update successfully");
-    });
+        contactNumber: "0712345678",
+      })
+    );
   });
+});
 
   describe("deleteLocationService", () => {
     it("should return success message if location is deleted", async () => {

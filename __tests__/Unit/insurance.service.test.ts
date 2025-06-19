@@ -146,28 +146,38 @@ describe("Insurance Service Tests", () => {
   });
 
   describe("updateInsuranceService", () => {
-    it("should update the insurance and return success message", async () => {
-      const mockId = 1;
-      const mockInsurance: TIInsurance = {
-        carId: 2,
-        provider: "XYZ Insurance",
-        policyNumber: "NEW123",
-        startDate: new Date("2026-01-01"),
-        endDate: new Date("2026-12-12"),
-      };
+  it("should update the insurance and return the updated object", async () => {
+    const mockId = 1;
+    const mockInsurance: any = {
+      insuranceId: mockId,
+      carId: 2,
+      provider: "XYZ Insurance",
+      policyNumber: "NEW123",
+      startDate: new Date("2026-01-01"),
+      endDate: new Date("2026-12-12"),
+    };
 
-      (db.update as jest.Mock).mockReturnValue({
-        set: jest.fn().mockReturnValue({
-          where: jest.fn().mockReturnValue({
-            returning: jest.fn().mockResolvedValueOnce([mockInsurance]),
-          }),
+    (db.update as jest.Mock).mockReturnValue({
+      set: jest.fn().mockReturnValue({
+        where: jest.fn().mockReturnValue({
+          returning: jest.fn().mockResolvedValueOnce([mockInsurance]),
         }),
-      });
-
-      const result = await updateInsuranceService(mockId, mockInsurance);
-      expect(result).toBe("Insurance update successfully");
+      }),
     });
+
+    const result = await updateInsuranceService(mockId, mockInsurance);
+
+    expect(result).toEqual(expect.objectContaining({
+      insuranceId: mockId,
+      carId: 2,
+      provider: "XYZ Insurance",
+      policyNumber: "NEW123",
+      startDate: new Date("2026-01-01"),
+      endDate: new Date("2026-12-12"),
+    }));
   });
+});
+
 
   describe("deleteInsuranceService", () => {
     it("should return success message if insurance is deleted", async () => {

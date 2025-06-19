@@ -29,6 +29,7 @@ export const getAllInsuranceService = async () => {
 // get insurance by id with car details
 export const getInsuranceById = async (insuranceId: number) => {
   const insurance = await db.query.InsuranceTable.findFirst({
+    where: eq(InsuranceTable.insuranceId, insuranceId),
     with: {
       car: true,
     },
@@ -41,18 +42,33 @@ export const getInsuranceById = async (insuranceId: number) => {
   return insurance;
 };
 
-//update insurance service
-export const updateInsuranceService = async (id: number, insurance: TIInsurance) => {
-    await db.update(InsuranceTable).set(insurance).where(eq(InsuranceTable.insuranceId, id)).returning();
-    return "Insurance update successfully";
+export const updateInsuranceService = async (
+  id: number,
+  insurance: Partial<TIInsurance>
+) => {
+  const [updated] = await db
+    .update(InsuranceTable)
+    .set(insurance)
+    .where(eq(InsuranceTable.insuranceId, id))
+    .returning();
 
+  return updated || null;
 };
 
-//delete insurance service
-export const deleteInsuranceService = async (id: number) => {
-    const deleted = await db.delete(InsuranceTable).where(eq(InsuranceTable.insuranceId, id)).returning();
-    if (deleted.length === 0) {
-        return "Insurance not found";
-    }
+
+
+
+export const deleteInsuranceService = async (insuranceId: number) => {
+  const deleted = await db
+    .delete(InsuranceTable)
+    .where(eq(InsuranceTable.insuranceId, insuranceId))
+    .returning(); 
+
+  if (deleted.length > 0) {
     return "Insurance deleted successfully";
+  } else {
+    return "Insurance not found";
+  }
 };
+
+

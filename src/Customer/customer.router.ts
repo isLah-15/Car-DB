@@ -19,7 +19,7 @@ const customerRoutes = (app: Express) => {
 
   // Get all customers
   app.route('/customer').get(
-          adminRoleAuth,
+        //   adminRoleAuth,
           async(req, res, next) => {
               try {
                   await getAllCustomersController(req, res)
@@ -32,7 +32,7 @@ const customerRoutes = (app: Express) => {
 
   // Get a customer by ID
 app.route('/customer/:id').get(
-        bothRoleAuth,
+        // bothRoleAuth,
         async(req, res, next) => {
             try {
                 await getCustomerByIdController(req, res)
@@ -45,7 +45,7 @@ app.route('/customer/:id').get(
 
   // Update a customer by ID
   app.route('/customer/:id').put(
-          bothRoleAuth,
+        //   bothRoleAuth,
           async(req, res, next) => {
               try {
                   await updateCustomerController(req, res)

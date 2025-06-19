@@ -4,7 +4,7 @@ import db from "../Drizzle/db"; // my configured database connection
 
 //create booking service
 export const createBookingService = async (booking: TIBooking) => {
-    const [inserted] = await db.insert(BookingTable).values(booking).returning()
+    const inserted = await db.insert(BookingTable).values(booking).returning()
         if(inserted) {
             return inserted;
         }
@@ -33,7 +33,7 @@ export const getAllBookingService = async () => {
 // get all bookings by Id service with customer, car, and payment details
 export const getBookingsById = async (bookingId: number) => {
   const booking = await db.query.BookingTable.findMany({
-    
+    where: eq(BookingTable.bookingId, bookingId),
     with: {
       customer: true,
       car: true,
